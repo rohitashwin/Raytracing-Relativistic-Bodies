@@ -84,8 +84,9 @@
                     <h2 class="subtitle has-text-centered">
                         The clip shows the rendered scene of a black hole using my pathtracer. The source sky is that of
                         <a href="https://science.nasa.gov/asset/hubble/ag-carinae/" target="_blank">NASA's picture</a>
-                        of the AG Carinae nebular structure. The black circle in the center is the Event Horizon. At the
-                        center of the circle (sphere) is the singularity. The gargantuan curvature of spacetime caused
+                        of the AG Carinae nebular structure. The black circle in the center is the shadow of the black
+                        hole roughly 2.6 times the Schwarzschild radius. Within the shadow is the Event Horizon, where
+                        the gargantuan curvature of spacetime caused
                         by extreme graviational effects is so strong that not even light, the fastest possible object in
                         the universe, can escape, causing it to appear nearly absolutely black. The outer ring that
                         appears to be a lens is called the <a
@@ -93,7 +94,9 @@
                         behind the black hole is visible through this ring due to graviational lensing. The dark ring
                         next to the Einstein Ring is the <a href="https://en.wikipedia.org/wiki/Photon_sphere">Photon
                             Sphere</a>. This is the region where the velocity vector of the light is just right for it
-                        to orbit the black hole.
+                        to orbit the black hole. <em style="opacity: 50%;">(time to render: ~40 minutes on M1 Pro
+                            Macbook Pro, for reference the Stanford dragon with GGX brdf takes around 700 milliseconds
+                            to render post BVH construction)</em>
                     </h2>
                 </div>
             </div>
@@ -135,7 +138,9 @@
                 <div class="columns">
                     <div class="column is-four-fifths">
                         <div class="content">
-                            <p>Special thanks to Riccardo Antonelli's <a href="http://spiro.fisica.unipd.it/~antonell/schwarzschild/" target="_blank">blog post</a> for going over the complicated math behind geodesics!</p>
+                            <p>Special thanks to Riccardo Antonelli's <a
+                                    href="http://spiro.fisica.unipd.it/~antonell/schwarzschild/" target="_blank">blog
+                                    post</a> for going over the complicated math behind geodesics!</p>
                             <p>
                                 The geodesic equations describe the motion of particles and light in curved spacetime.
                                 For a Schwarzschild black hole, these equations are derived from the Schwarzschild
@@ -187,7 +192,8 @@
                             <p>
                                 Following the equation I mentioned above, I ran a simulation to visualise the path of
                                 the rays. The following video shows the path taken by rays randomly generated from a
-                                point:
+                                point: <em style="opacity: 50%;">Paths generated using scikit's powerful ODE solver in
+                                    just 30 lines of code!</em>
                             </p>
                             <video poster="" id="tree" autoplay controls muted loop
                                 style="width:600px; max-width:none; display:block; margin:0 auto;">
@@ -218,7 +224,8 @@
                                 The first implementation was to extend my raytracer to support Skyboxes. I chose to use
                                 equirectangular skyboxes which takes a 2:1 sky image and maps it to a sphere at
                                 infinity. When the rays exit to infinity, they're mapped to uv coords of the source
-                                image from which I sample the pixel colors.
+                                image from which I sample the pixel colors. <em style="opacity: 50%;">UV map generated
+                                    using a custom python script</em>
                             </p>
                             <div>
                                 <div class="columns is-centered">
@@ -314,10 +321,53 @@
                                         <figure class="image is-4by3">
                                             <img src="./static/images/dragon_front_bh.png" alt="Skybox UV Mapping">
                                         </figure>
-                                        <p class="has-text-centered">Stanford Dragon with BH in front (you can see the light sources clearly near the EH, which are not visible in the original image)</p>
+                                        <p class="has-text-centered">Stanford Dragon with BH in front (you can see the
+                                            light sources clearly near the EH, which are not visible in the original
+                                            image)</p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End youtube video -->
+
+    <!-- Youtube video -->
+    <section class="hero is-small">
+        <div class="hero-body">
+            <div class="container">
+                <h2 class="title is-3">Notes</h2>
+                <div class="columns">
+                    <div class="column is-four-fifths">
+                        <div class="content">
+                            <h3>Why not Raymarching?</h3>
+                            <p>My initial choice was to use raymarching to perform the raytracing. This would involve
+                                solving the geodesic at every pre specified timestep and then querying the BVH for
+                                intersections. The obvious and the most significant advantage of raymarching is the ease
+                                of getting the signature accretion disk to appear. That being said, raymarching was
+                                simply too computationally expensive to run on my machine. This is a CPU based
+                                pathtracer, and I have an Apple Metal GPU accelerated pathtracer in the works but that's
+                                just a personal project of mine adjacent to the CSE 168 class raytracer. Since the Metal
+                                pipeline is relatively self contained with little adjustability, it would interfere with
+                                the required implementations in the classwork. Therefore, I deemed the raymarcher to be
+                                too expensive and I came up with a bunch of mathematical tricks to get something very
+                                close to a fully raymarched solution.</p>
+                            <h3>Future Work</h3>
+                            <p>These are the things I will be expanding upon in the future (in no particular order):</p>
+                            <ul>
+                                <li>GPU accelerated ray marching + accretion disk</li>
+                                <li>Non static blackholes</li>
+                                <li>Real Time rendering (p.s. this is extremely difficult even for the most basic
+                                    blackholes)</li>
+                            </ul>
+                            <h3>Inspiration</h3>
+                            <p><a href="https://youtu.be/6akmv1bsz1M?si=UUbrrHxMLMqYCKjj">Veritasium's video</a> on
+                                Black Holes was a huge inspiration for this project.</p>
+                            <p><a href="https://youtu.be/ABFGKdKKKyg?si=zHhFofiwXb2iG_AA">ScienceClic's video</a> on
+                                Interstellar's math was also a major source of inspiration.</p>
                         </div>
                     </div>
                 </div>
@@ -331,15 +381,13 @@
             <div class="columns is-centered">
                 <div class="column is-8">
                     <div class="content">
-
                         <p>
                             This page was built using the <a
                                 href="https://github.com/eliahuhorwitz/Academic-project-page-template"
                                 target="_blank">Academic Project Page Template</a> which was adopted from the <a
-                                href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-                            You are free to borrow the source code of this website, we just ask that you link back to
-                            this page in the footer. <br> This website is licensed under a <a rel="license"
-                                href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+                                href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.<a
+                                rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">
+                                Creative
                                 Commons Attribution-ShareAlike 4.0 International License</a>.
                         </p>
 
